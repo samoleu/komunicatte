@@ -9,8 +9,8 @@ const createChat = async (req, res) => {
             return res.status(400).json({ message: "Please provide chatName and participants." });
         }
 
-        const chat = new Chat.create(req.body);
-        res.status(200).json(chat);
+        const chat = Chat.create(req.body);
+        res.status(201).json(chat);
 
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -35,3 +35,9 @@ const deleteChat = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+module.exports = {
+    createChat,
+    findAllChats,
+    deleteChat
+}
