@@ -11,11 +11,11 @@ const ChatSchema = mongoose.Schema(
             type: String,
             required: true,
         },
-        lastMessageSender: {
+        lastMessage: {
             type: String,
             required: false,
         },
-        lastMessage: {
+        lastMessageSender: {
             type: String,
             required: false,
         },
