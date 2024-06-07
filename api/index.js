@@ -21,7 +21,7 @@ const app = express();
 
 app.use(express.json());
 app.use('/api/example', exampleRoute);
-app.use('/api', chatRoute);
+app.use('/api/chat', chatRoute);
 
 app.listen(3001, () => {
     console.log(`Server Started at ${3001}`)

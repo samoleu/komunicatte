@@ -2,14 +2,14 @@ const Chat = require('../models/chatModel');
 
 const createChat = async (req, res) => {
     try {
-        
-        const { chatName, participants } = req.body;
+        const { members } = req.body;
     
-        if (!chatName || !participants) {
-            return res.status(400).json({ message: "Please provide chatName and participants." });
+        if (!members) {
+            return res.status(400).json({ message: "Please provide members." });
         }
-
-        const chat = Chat.create(req.body);
+        
+        const chat = await Chat(req.body);
+        await chat.save();
         res.status(201).json(chat);
 
     } catch (error) {
@@ -17,9 +17,9 @@ const createChat = async (req, res) => {
     }
 };
 
-const findAllChats = async (req, res) => {
+const findAllChatsByProfile = async (req, res) => {
     try {
-        const chats = await Chat.find({});
+        const chats = await Chat.find({members: req.params.id});
         res.status(200).json(chats);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -30,14 +30,27 @@ const deleteChat = async (req, res) => {
     try {
         const { id } = req.params;
         const chat = await Chat.findByIdAndDelete(id);
-        res.status(200).json(chat);
+        res.status(204).json();
     } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+const updateChatById = async (req, res) => { 
+    try {
+        const { id } = req.params;
+
+        await Chat.findByIdAndUpdate(id, req.body);
+        return res.status(200).json();
+   
+    } catch (error) {   
         res.status(500).json({ message: error.message });
     }
 };
 
 module.exports = {
     createChat,
-    findAllChats,
+    updateChatById,
+    findAllChatsByProfile,
     deleteChat
 }

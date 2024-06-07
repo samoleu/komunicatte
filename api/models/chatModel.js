@@ -2,28 +2,26 @@ const mongoose = require('mongoose');
 
 const ChatSchema = mongoose.Schema(
     {
-        profilePicture: {
-            type: String,
-            required: false,
-            default: "https://imgur.com/mCHMpLT",
-        },
-        chatName: {
-            type: String,
-            required: true,
-        },
         lastMessage: {
-            type: String,
-            required: false,
+            message: {
+                type: String,
+                required: false,
+            },
+            sender: {
+                type: String,
+                required: false,
+            },
+            timestamp: {
+                type: Date,
+                required: false,
+            },
+            status: { // true: lida, false: não lida
+                type: Boolean,
+                required: false,
+                default: false,
+            },
         },
-        lastMessageSender: {
-            type: String,
-            required: false,
-        },
-        lastMessageTimestamp: {
-            type: Date,
-            required: false,
-        },
-        participants: {
+        members: {
             type: Array,
             required: true,
             default: [],
