@@ -10,7 +10,7 @@ const createChat = async (req, res) => {
         
         const chat = await Chat(req.body);
         await chat.save();
-        res.status(201).json(chat);
+        res.status(200).json(chat);
 
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -29,8 +29,8 @@ const findAllChatsByProfile = async (req, res) => {
 const deleteChat = async (req, res) => {
     try {
         const { id } = req.params;
-        const chat = await Chat.findByIdAndDelete(id);
-        res.status(204).json();
+        await Chat.findByIdAndDelete(id);
+        res.status(200).json();
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -39,7 +39,6 @@ const deleteChat = async (req, res) => {
 const updateChatById = async (req, res) => { 
     try {
         const { id } = req.params;
-
         await Chat.findByIdAndUpdate(id, req.body);
         return res.status(200).json();
    
