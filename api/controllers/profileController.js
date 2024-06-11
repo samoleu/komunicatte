@@ -45,9 +45,9 @@ const createProfile = async (req, res) => {
     });
 
     const savedProfile = await newProfile.save();
-    res.status(201).json(savedProfile); // 201 Created status code
+    res.status(201).json(savedProfile);
   } catch (error) {
-    res.status(400).json({ message: error.message }); // 400 Bad Request for validation errors
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -73,7 +73,7 @@ const updateProfile = async (req, res) => {
 
     res.status(200).json(profile);
   } catch (error) {
-    res.status(400).json({ message: error.message }); // 400 Bad Request for validation errors
+    res.status(500).json({ message: error.message });
   }
 };
 
