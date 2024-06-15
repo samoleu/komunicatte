@@ -24,7 +24,7 @@ const ChatSchema = mongoose.Schema(
     },
     members: {
       type: Array,
-      required: true,
+      required: [true, 'Please provide members.'],
       default: [],
     },
   },
