@@ -16,7 +16,9 @@ export default function layout({
 }) {
   return (
       <html lang="en">
-        <body className={inter.className}>{children}</body>
+        <body className={`${inter.className} flex w-screen h-screen`}>
+          {children}
+        </body>
       </html>
   );
 }
