@@ -4,13 +4,13 @@ const createCommunity = async (req, res) => {
   try {
     const { communityRef, communityName, admins, visibility, communityMembers } = req.body;
 
-    if (!communityRef || !communityName || !admins || !visibility || !communityMembers) {
+    if (!communityRef || !communityName || typeof visibility !== 'boolean' || !communityMembers) {
       return res
         .status(400)
         .json({ message: "Please fill in all required fields" });
     }
 
-    if (communityRef === "" || communityName === "" || admins.length === 0 || communityMembers.length === 0) {
+    if (communityRef === "" || communityName === "" || communityMembers.length === 0) {
       return res.status(400).json({ message: "Please fill in all required fields" });
     }
 
@@ -32,29 +32,23 @@ const createCommunity = async (req, res) => {
 const findAllCommunitiesByName = async (req, res) => {
   try {
     const { name } = req.params;
+    const userId = req.user.id; // Supondo que o ID do usuário está disponível em req.user.id
 
-    if (!name) {
+    if (!name || name === "") {
       return res.status(400).json({ message: "Community name is required" });
     }
 
-    const communities = await Community.find({ communityName: name }); //TODO: fazer checagem de visibilidade de comunidade para mostrar
+    let communities = await Community.find({ communityName: name ,
+      visibility : true
+    });
+
+    // Filtrar comunidades para incluir apenas aquelas que são públicas ou onde o usuário é um membro
+    communities = communities.filter(community => {
+      return community.visibility === true || community.communityMembers.includes(userId);
+    });
 
     if (communities.length === 0) {
       return res.status(404).json({ message: "No communities found for the given name" });
-    }
-
-    res.status(200).json(communities);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-const findAllCommunitiesByProfile = async (req, res) => {
-  try {
-    const communities = await Community.find({ communityMembers: req.params.id });
-
-    if (communities.length === 0) {
-      return res.status(404).json({ message: "No communities found for this profile" });
     }
 
     res.status(200).json(communities);
@@ -67,8 +61,14 @@ const updateCommunityById = async (req, res) => {
   try {
     const { id } = req.params;
 
-    await Community.findByIdAndUpdate(id, req.body);
-    return res.status(200).json();
+    // Find and update the community by ID
+    const updatedCommunity = await Community.findByIdAndUpdate(id, req.body, { new: true, runValidators: true });
+
+    if (!updatedCommunity) {
+      return res.status(404).json({ message: "Community not found" });
+    }
+
+    res.status(200).json(updatedCommunity);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -97,7 +97,6 @@ const deleteCommunity = async (req, res) => {
 
 module.exports = {
   createCommunity,
-  findAllCommunitiesByProfile,
   findAllCommunitiesByName,
   updateCommunityById,
   deleteCommunity,

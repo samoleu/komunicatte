@@ -10,7 +10,6 @@ const {
 } = require("../controllers/communityController");
 
 router.post("/", createCommunity);
-router.get("/:id", findAllCommunitiesByProfile);
 router.get("/name/:name", findAllCommunitiesByName);
 router.delete("/:id", deleteCommunity);
 router.put("/:id", updateCommunityById);
