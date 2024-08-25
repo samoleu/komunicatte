@@ -4,7 +4,9 @@ const ClerkBtn = () => {
   return (
     <>
       <SignedOut>
-        <SignInButton />
+        <SignInButton mode="modal">
+          <button className="bg-black text-white py-2 px-4 rounded-lg text-lg hover:bg-gray-800">Sign in</button>
+        </SignInButton>
       </SignedOut>
       <SignedIn>
         <UserButton />
