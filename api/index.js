@@ -6,6 +6,7 @@ const exampleRoute = require("./routes/exampleRoute");
 const accountRoute = require("./routes/accountRoute");
 const profileRoute = require('./routes/profileRoute');
 const chatRoute = require("./routes/chatRoute");
+const communityRoute = require("./routes/communityRoute");
 const mongoose = require("mongoose");
 
 const mongoString = process.env.DATABASE_URL;
@@ -29,6 +30,7 @@ app.use("/api/example", exampleRoute);
 app.use("/api/account", accountRoute);
 app.use('/api/profile', profileRoute);
 app.use("/api/chat", chatRoute);
+app.use("/api/community", communityRoute);
 
 app.listen(3001, () => {
   console.log(`Server Started at ${3001}`);

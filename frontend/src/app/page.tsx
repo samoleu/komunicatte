@@ -1,3 +1,14 @@
+// Para uso do ContextAPI utilize o "use client" e importe os itens abaixo em seu componente para utilizar
+
+// const context = useContext(GeneralContext);
+// {context.theme};
+
+'use client';
+import { useContext } from "react"
+import { GeneralContext } from "@/context/GeneralContext";
+
+
+
 import React from "react";
 import Image from "next/image";
 import ClerkBtn from "@/components/SignInBtn";
