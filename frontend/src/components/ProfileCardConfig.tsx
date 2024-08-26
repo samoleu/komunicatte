@@ -1,12 +1,6 @@
 "use client";
 
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  useCallback,
-  useMemo,
-} from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import Image from "next/image";
 
 interface ProfileCardConfigProps {
@@ -31,14 +25,14 @@ const ProfileCardConfig = ({ profile }: ProfileCardConfigProps) => {
   });
 
   const [bgColor, setBgColor] = useState<string>("rgba(252,252,255,0.4)");
-
   const maxBioLength = 100;
   const maxProfileNameLength = 16;
-
   const nameInputRef = useRef<HTMLInputElement>(null);
   const bioInputRef = useRef<HTMLTextAreaElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  const [saveTimeout, setSaveTimeout] = useState<NodeJS.Timeout | null>(null);
 
   const getActivityColor = (status: string) => {
     switch (status.toLowerCase()) {
@@ -53,13 +47,9 @@ const ProfileCardConfig = ({ profile }: ProfileCardConfigProps) => {
     }
   };
 
-  const activityColor = useMemo(
-    () => getActivityColor(profileData.activityStatus),
-    [profileData.activityStatus]
-  );
+  const activityColor = getActivityColor(profileData.activityStatus);
 
   useEffect(() => {
-    // Extract average color from the profile picture
     const extractColor = () => {
       if (imageRef.current && canvasRef.current) {
         const canvas = canvasRef.current;
@@ -74,7 +64,9 @@ const ProfileCardConfig = ({ profile }: ProfileCardConfigProps) => {
           const imageData = ctx.getImageData(0, 0, img.width, img.height);
           const data = imageData.data;
 
-          let r = 0, g = 0, b = 0;
+          let r = 0,
+            g = 0,
+            b = 0;
           const length = data.length / 4;
 
           for (let i = 0; i < length; i++) {
@@ -99,18 +91,27 @@ const ProfileCardConfig = ({ profile }: ProfileCardConfigProps) => {
     }
   }, [profileData.profilePicture]);
 
-  useEffect(() => {
-    // Save profile data to the backend whenever profileData changes
-    const saveProfileData = async () => {
-      try {
-        // Change logic to save profile data to the backend
-        console.log("Profile saved:", profileData);
-      } catch (error) {
-        console.error("Error saving profile data:", error);
-      }
-    };
-    saveProfileData();
+  const saveProfileData = useCallback(async () => {
+    try {
+      //! Change logic to save profile data to backend
+      console.log("Profile saved:", profileData);
+      alert("Profile saved!");
+    } catch (error) {
+      console.error("Error saving profile data:", error);
+    }
   }, [profileData]);
+
+  useEffect(() => {
+    if (saveTimeout) clearTimeout(saveTimeout);
+
+    const timeout = setTimeout(() => {
+      saveProfileData();
+    }, 1000);
+
+    setSaveTimeout(timeout);
+
+    return () => clearTimeout(timeout);
+  }, [profileData, saveProfileData]);
 
   const handleNameChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -126,7 +127,7 @@ const ProfileCardConfig = ({ profile }: ProfileCardConfigProps) => {
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       setProfileData((prev) => ({
         ...prev,
-        bio: e.target.value,
+        bio: e.target.value.slice(0, maxBioLength),
       }));
     },
     []
@@ -151,8 +152,8 @@ const ProfileCardConfig = ({ profile }: ProfileCardConfigProps) => {
   );
 
   const cycleActivityStatus = () => {
-    const statuses = ["online", "offline", "do not disturb"];
-    const currentIndex = statuses.indexOf(profileData.activityStatus.toLowerCase());
+    const statuses = ["Online", "Do not disturb", "Offline"];
+    const currentIndex = statuses.indexOf(profileData.activityStatus);
     const nextIndex = (currentIndex + 1) % statuses.length;
     setProfileData((prev) => ({
       ...prev,
@@ -266,7 +267,13 @@ const ProfileCardConfig = ({ profile }: ProfileCardConfigProps) => {
         <div
           className={`w-[8.625rem] h-[8.625rem] rounded-full border-[1rem] flex items-center justify-center cursor-pointer ${activityColor}`}
         >
-          <span className="absolute text-lg font-semibold text-black top-[1.5rem] select-none max-w-[6rem] text-center break-words leading-tight">
+          <span
+            className="absolute text-lg font-semibold text-black top-[2.5rem] select-none max-w-[6rem] text-center break-words leading-tight transform -translate-y-[40%]"
+            style={{
+              lineHeight:
+                profileData.activityStatus.length > 10 ? "1.2" : "normal",
+            }}
+          >
             {profileData.activityStatus}
           </span>
         </div>

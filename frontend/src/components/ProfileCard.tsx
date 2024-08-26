@@ -117,7 +117,13 @@ const ProfileCard = ({ profile }: ProfileCardProps) => {
         <div
           className={`w-[8.625rem] h-[8.625rem] rounded-full border-[1rem] flex items-center justify-center ${activityColor}`}
         >
-          <span className="absolute text-lg font-semibold text-black top-[1.5rem] select-none max-w-[6rem] text-center break-words leading-tight">
+          <span
+            className="absolute text-lg font-semibold text-black top-[2.5rem] select-none max-w-[6rem] text-center break-words leading-tight transform -translate-y-[40%]"
+            style={{
+              lineHeight:
+                profile.activityStatus.length > 10 ? "1.2" : "normal",
+            }}
+          >
             {profile.activityStatus}
           </span>
         </div>
