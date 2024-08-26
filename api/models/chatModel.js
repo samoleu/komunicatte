@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 
 const ChatSchema = mongoose.Schema(
   {
+    nameChat: {
+      type: String,
+      required: [true, 'Please provide a name.'],
+    },
     lastMessage: {
       message: {
         type: String,

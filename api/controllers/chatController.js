@@ -1,20 +1,23 @@
 const Chat = require("../models/chatModel");
 
-const createChat = async (req, res) => {
+//TODO Seria interessante checar se os membros passados no corpo da requisição realmente existem.
+const createChat = async (req, res) => {  
   try {
     const { members } = req.body;
 
-    const chatExists = await Chat.countDocuments(members);
+    const isPrivate = members.length === 2;
 
-    if(chatExists) {
+    const chatExists = await Chat.countDocuments({
+      members: { $all: members },
+      $expr: { $eq: [{ $size: "$members" }, members.length] }
+    });
+    
+    if (isPrivate && chatExists > 0) {
       return res.status(400).json({ message: "Chat already exists." });
     }
 
-    if (!members) {
-      return res.status(400).json({ message: "Please provide members." });
-    }
-
-    const chat = await Chat(req.body);
+      
+    const chat = await new Chat(req.body);
     await chat.save();
     res.status(200).json(chat);
   } catch (error) {
@@ -31,7 +34,7 @@ const findAllChatsByProfile = async (req, res) => {
   }
 };
 
-const deleteChat = async (req, res) => {
+const deleteChatById = async (req, res) => {
   try {
     const { id } = req.params;
     await Chat.findByIdAndDelete(id);
@@ -41,7 +44,8 @@ const deleteChat = async (req, res) => {
   }
 };
 
-const updateChatById = async (req, res) => {
+//TODO Seria interessante checar se os membros passados no corpo da requisição realmente existem.
+const updateChatById = async (req, res) => { 
   try {
     const { id } = req.params;
     await Chat.findByIdAndUpdate(id, req.body);
@@ -55,5 +59,5 @@ module.exports = {
   createChat,
   updateChatById,
   findAllChatsByProfile,
-  deleteChat,
+  deleteChatById,
 };
