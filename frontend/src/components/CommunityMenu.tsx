@@ -4,6 +4,7 @@ import CommunitySearchBtn from "./CommunitySearchBtn";
 import Image from "next/image";
 import CommunityNav from "./CommunityNav";
 import { useState } from "react";
+import CommunityMiniature from "./CommunityMiniature";
 
 interface CommunityMenuProps {
   id: number;
@@ -90,23 +91,20 @@ const CommunityMenu = () => {
   return (
     <>
       <div className="flex flex-nowrap absolute top-0 left-0 h-full">
-        <div className="flex flex-col items-center gap-4 py-4 px-2 h-full w-16 bg-background shadow-[5px_0px_10px_0px_#00000030]">
+        <div className="flex flex-col items-center gap-4 py-4 px-2 h-full w-16 bg-background shadow-[0px_4px_36.4px_11px_#DDDBFF] z-20">
           <CommunitySearchBtn />
           <div className="flex flex-col items-center gap-2 h-full w-full">
             {userCommunityList.map((community) => {
               return (
-                <div className={`flex rounded-xl justify-center items-center p-1 cursor-pointer`} key={community.id}> 
+                <div
+                  className="flex rounded-xl justify-center items-center p-1 cursor-pointer"
+                  key={community.id}
+                >
                   <div
                     onClick={() => handleCommunityClick(community)}
                     className="h-12 w-12 overflow-hidden rounded-full"
                   >
-                    <Image
-                      src={community.img_url}
-                      alt={community.name}
-                      width={48}
-                      height={48}
-                      className="object-cover h-full w-full"
-                    />
+                    <CommunityMiniature community={community} />
                   </div>
                 </div>
               );
@@ -117,6 +115,10 @@ const CommunityMenu = () => {
       </div>
     </>
   );
+  
+  
+  
+  
 };
 
 export default CommunityMenu;
