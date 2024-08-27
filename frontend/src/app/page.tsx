@@ -3,17 +3,13 @@
 // const context = useContext(GeneralContext);
 // {context.theme};
 
-'use client';
-
-import { useContext } from "react"
-import { GeneralContext } from "@/context/GeneralContext"
+"use client";
 
 import React from "react";
 import Image from "next/image";
 import ClerkBtn from "@/components/SignInBtn";
 
 const Page = () => {
-
   return (
     <>
       <div className="flex flex-col items-center h-screen w-screen bg-gradient-to-b from-[#9a94d5] to-[#DDDBFF] bg-opacity-60">
@@ -27,7 +23,9 @@ const Page = () => {
                 height={50}
                 className="object-contain"
               />
-              <h1 className="text-4xl font-bold text-black leading-tight">Komunicatte</h1>
+              <h1 className="text-4xl font-bold text-black leading-tight">
+                Komunicatte
+              </h1>
             </div>
             <ClerkBtn></ClerkBtn>
           </section>
@@ -37,14 +35,13 @@ const Page = () => {
                 Discover a New Era of Messaging
               </h1>
               <p className="text-lg font-bold text-[#3f3f3f] mb-6">
-                Welcome to a new era of communication where
-                you can effortlessly balance work and personal life.
-                Our app provides a robust messaging platform with
-                dedicated profiles for work and personal use, promising
-                an experience that's not just better than WhatsApp.
+                Welcome to a new era of communication where you can effortlessly
+                balance work and personal life. Our app provides a robust
+                messaging platform with dedicated profiles for work and personal
+                use, promising an experience that's not just better than
+                WhatsApp.
               </p>
               <ClerkBtn className="w-1/3" label="Get Started"></ClerkBtn>
-
             </div>
             <Image
               src="https://imgur.com/NI2Xfzq.png"

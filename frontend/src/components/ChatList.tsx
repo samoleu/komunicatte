@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useEffect, useState, useRef  } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { GeneralContext } from "@/context/GeneralContext";
 import { useAuth } from "@clerk/clerk-react";
 import axios from "axios";
@@ -13,10 +13,10 @@ const apiUrl = process.env.NEXT_PUBLIC_BASE_URI;
 interface Chat {
   nameChat: string;
   members: string[];
+  _id: string;
 }
 
 const ChatList = () => {
-
   const context = useContext(GeneralContext);
   const userId = context.profile?.id;
 
@@ -27,6 +27,7 @@ const ChatList = () => {
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   const fetchUserChats = async () => {
+    console.log("userId", userId);
     if (userId) {
       try {
         const response = await axios.get(`${apiUrl}/api/chat/${userId}`);
@@ -38,26 +39,32 @@ const ChatList = () => {
     }
   };
 
-  const [searchBar, setSearchBar] = useState('');
+  const [searchBar, setSearchBar] = useState("");
 
   useEffect(() => {
-    const normalizedSearchBar = searchBar.trim().replace(/\s+/g, ' ').toLowerCase();
+    const normalizedSearchBar = searchBar
+      .trim()
+      .replace(/\s+/g, " ")
+      .toLowerCase();
     const filteredChats = userChats.filter((chat) => {
-      const normalizedChatName = chat.nameChat.trim().replace(/\s+/g, ' ').toLowerCase();
+      const normalizedChatName = chat.nameChat
+        .trim()
+        .replace(/\s+/g, " ")
+        .toLowerCase();
       return normalizedChatName.includes(normalizedSearchBar);
     });
-  
+
     setFilteredUserChats(filteredChats);
   }, [searchBar]);
-  
+
   useEffect(() => {
     fetchUserChats();
   }, [userId]);
 
   const toggleSearchFriends = () => {
     setShowSearchFriends(!showSearchFriends);
-  }
-  
+  };
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       // Verifica se o clique foi fora do botão e do CardSearchFriends
@@ -71,30 +78,33 @@ const ChatList = () => {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
     <div className="bg-background p-2 h-screen w-96">
       <div className="flex items-center ml-2 mb-4 mt-2">
         <input
-            type="text"
-            onChange={(e) => setSearchBar(e.target.value)}
-            placeholder="Search here ..."
-            className="focus:outline-none flex w-full p-2 text-text-2 bg-[#EFEFFC] rounded-md"
+          type="text"
+          onChange={(e) => setSearchBar(e.target.value)}
+          placeholder="Search here ..."
+          className="focus:outline-none flex w-full p-2 text-text-2 bg-[#EFEFFC] rounded-md"
         />
-        <button 
+        <button
           ref={buttonRef}
           className="text-blue-500 bg-[#EFEFFC] text-sm ml-3 mr-3 p-1 h-full rounded-md"
           onClick={toggleSearchFriends}
         >
-          <RiUserAddLine className='text-3xl text-black'/>
+          <RiUserAddLine className="text-3xl text-black" />
         </button>
       </div>
 
       {showSearchFriends && (
-        <div ref={searchFriendsRef} className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+        <div
+          ref={searchFriendsRef}
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+        >
           <CardSearchFriends />
         </div>
       )}

@@ -13,6 +13,19 @@ const getAccountById = async (req, res) => {
   }
 };
 
+const getAccountByClerkId = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const account = await Account.findOne({ clerkUserId: id });
+    if (!account) {
+      return res.status(200).json( null );
+    }
+    res.status(200).json(account);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 const createAccount = async (req, res) => {
   try {
     const { clerkUserId, userName, email, profileReferences } = req.body;
@@ -78,4 +91,5 @@ module.exports = {
 	createAccount,
 	updateAccountById,
 	deleteAccount,
+  getAccountByClerkId,
 };
