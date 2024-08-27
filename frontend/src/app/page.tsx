@@ -13,7 +13,7 @@ import Image from "next/image";
 import ClerkBtn from "@/components/SignInBtn";
 
 const Page = () => {
-  
+
   return (
     <>
       <div className="flex flex-col items-center h-screen w-screen bg-gradient-to-b from-[#9a94d5] to-[#DDDBFF] bg-opacity-60">
@@ -21,7 +21,7 @@ const Page = () => {
           <section className="flex justify-between items-center px-8 pt-4 w-full">
             <div className="flex items-center space-x-4">
               <Image
-                src="https://imgur.com/ezguYup"
+                src="https://i.imgur.com/ezguYup.png"
                 alt="komunicatte-logo"
                 width={50}
                 height={50}
@@ -43,12 +43,11 @@ const Page = () => {
                 dedicated profiles for work and personal use, promising
                 an experience that's not just better than WhatsApp.
               </p>
-              <button className="bg-black text-white rounded-lg px-4 py-2 hover:bg-gray-800 w-1/3">
-                Get Started
-              </button>
+              <ClerkBtn className="w-1/3" label="Get Started"></ClerkBtn>
+
             </div>
             <Image
-              src="https://imgur.com/NI2Xfzq"
+              src="https://imgur.com/NI2Xfzq.png"
               alt="messaging-img"
               width={400}
               height={400}

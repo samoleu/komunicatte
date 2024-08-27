@@ -1,22 +1,20 @@
 'use client';
 
 import CommunityMenu from "@/components/CommunityMenu";
-import UserInfo from "@/components/UserInfo";
-import { UserButton, useUser, useSignIn } from "@clerk/nextjs";
+import { UserButton, useUser } from "@clerk/nextjs";
 import Image from "next/image";
-import React, { use } from "react";
+import { useRouter } from 'next/navigation'; 
+import React, { useEffect } from "react";
 
 const Page = () => {
   const { isLoaded, isSignedIn } = useUser();
+  const router = useRouter(); 
 
-  if (!isLoaded) {
-    return <p>KOMUNICATTE</p>; // or a loading indicator
-  }
-
-  if (!isSignedIn) {
-    // Handle the signed-out state here
-    return <p>Please sign in</p>;
-  }
+  useEffect(() => {
+    if (isLoaded && !isSignedIn) {
+      router.push('/'); 
+    }
+  }, [isLoaded, isSignedIn, router]);
 
   return (
     <>
@@ -25,7 +23,7 @@ const Page = () => {
           <section className="flex justify-between items-center px-8 pt-4 w-full">
             <div className="flex items-center space-x-4">
               <Image
-                src="https://imgur.com/ezguYup"
+                src="https://i.imgur.com/ezguYup.png"
                 alt="komunicatte-logo"
                 width={50}
                 height={50}
