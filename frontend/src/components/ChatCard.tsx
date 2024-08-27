@@ -2,10 +2,11 @@ import Image from 'next/image';
 
 interface ChatProps {
   chat: { 
+    nameChat: String,
     lastMessage: {
       message: String,
       sender: String,
-      timestamp:Date
+      timestamp: Date,
       status: Boolean,
     },
     members: String[],
@@ -22,8 +23,8 @@ const ChatCard = ({chat}: ChatProps) => {
           <Image src={"./next.svg"} alt="profile picture" height={64} width={64}/> 
         </div>
         <div className="flex flex-col">
-          <h2 className="text-text text-xl">{chat.lastMessage.sender}</h2>
-          <p className="text-text-2 text-base">{chat.lastMessage.message}</p>
+          <h2 className="text-text text-xl">{chat.nameChat}</h2>
+          <p className="text-text-2 text-base h-5">{chat.lastMessage.message}</p>
         </div>
       </div>
     </div>
