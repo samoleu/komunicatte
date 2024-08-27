@@ -4,7 +4,16 @@ const serverClient = StreamChat.getInstance(process.env.STREAM_API_KEY, process.
 
 exports.authenticateUser = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { id, name } = req.params;
+        const userResponse = await serverClient.queryUsers({ id });
+
+        if (userResponse.users.length === 0) {
+            await serverClient.upsertUser({
+                id,
+                name: name ? name : "New user",
+                role: "user",
+            });
+        }
         const token = serverClient.createToken(id);
         res.status(200).json({ token });
     } catch (error) {
@@ -47,3 +56,38 @@ exports.sendMessage = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+exports.getChannelByUserId = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const channels = await serverClient.queryChannels({
+            members: { $in: [id] },
+        });
+
+        const sanitizedChannels = channels.map(channel => ({
+            id: channel.id,
+            name: channel.data.name,
+            members: channel.state.members,
+            created_at: channel.data.created_at,
+            updated_at: channel.data.updated_at,
+            created_by: channel.data.created_by,
+        }));
+
+        res.status(200).json({ channels: sanitizedChannels });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+
+exports.getUserById = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const user = await serverClient.queryUsers({ id: { $in: [id] } });
+
+        res.status(200).json({ user });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}

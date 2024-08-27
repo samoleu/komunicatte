@@ -1,6 +1,4 @@
-"use client";
-
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext, use } from "react";
 import {
   Channel,
   ChannelHeader,
@@ -14,23 +12,59 @@ import { Channel as StreamChannelType } from "stream-chat";
 import { client } from "../streamClient";
 
 import "stream-chat-react/dist/css/v2/index.css";
+import { GeneralContext } from "@/context/GeneralContext";
+import axios from "axios";
+import ChatSuperiorCard from "./ChatSuperiorCard";
 
-interface ChatAreaProps {
-  channelId: string;
-  userToken: string;
+const apiUrl = process.env.NEXT_PUBLIC_BASE_URI;
+
+interface UserProfile {
+  accountRef: string;
+  profileId: string;
+  profileName: string;
+  acitivityStatus: string;
+  bio: string;
+  profilePicture: string;
+  friends: string[];
+  communityRefs: string[];
 }
 
-const ChatArea: React.FC<ChatAreaProps> = ({ channelId, userToken }) => {
+const ChatArea = () => {
+  const context = useContext(GeneralContext);
+  const channelId = context.activeView.chatId;
+  const userToken = context.userToken;
+  const userId = context.clerkId;
+  const userProfileId = context.profile?.id;
+
+  console.log("context", context);
+
   const [channel, setChannel] = useState<StreamChannelType | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [clientReady, setClientReady] = useState(false);
 
+  // Fetch user profile in a separate useEffect
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const response = await axios.get(`${apiUrl}/api/profile/${userProfileId}`);
+        setUserProfile(response.data);
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+      }
+    };
+
+    if (userProfileId) {
+      fetchUserProfile();
+    }
+  }, [userProfileId, userId]);
+
+  // Handle client connection and channel initialization
   useEffect(() => {
     let activeChannel: StreamChannelType | null = null;
 
     const initChannel = async () => {
       if (!client) return;
 
-      // Initialize the channel
       activeChannel = client.channel("messaging", channelId);
       await activeChannel.watch();
       setChannel(activeChannel);
@@ -38,14 +72,21 @@ const ChatArea: React.FC<ChatAreaProps> = ({ channelId, userToken }) => {
 
     const connectUser = async () => {
       try {
-        //TODO: set the user id to the actual user id
-        await client.connectUser({ id: "anotheruser" }, userToken);
+        const profileId = await context.profile?.id;
+        console.log("Trying to connect user...", { id: profileId }, userToken);
+        const response = await client.queryUsers({ id: { $in: ['66cd6ccc95824a1dfded1fd3', '66ce264ea1d15a9f2882912d', 'jessie'] } });
+        console.log("testttttttttt", response);
+        await client.connectUser({ id: profileId! }, userToken);
         setClientReady(true);
         await initChannel();
       } catch (error) {
         console.error("Error connecting user:", error);
       }
     };
+
+    
+
+
 
     if (userToken) {
       connectUser();
@@ -56,7 +97,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({ channelId, userToken }) => {
         activeChannel.stopWatching();
       }
     };
-  }, [channelId, userToken]);
+  }, [channelId, userToken, userId]);
 
   if (!clientReady) {
     return <div>Loading...</div>;
@@ -67,20 +108,32 @@ const ChatArea: React.FC<ChatAreaProps> = ({ channelId, userToken }) => {
   }
 
   const customClasses: CustomClasses = {
-    chat: 'str-chat',
+    chat: "str-chat",
   };
 
+  const theme =
+    context.theme === "light"
+      ? "str-chat__theme-light"
+      : "str-chat__theme-dark";
+
+      
+
   return (
-    // TODO: set theme to match the contextAPI theme='str-chat__theme-dark'
-    <Chat client={client} customClasses={customClasses}>
-      <Channel channel={channel}>
-        <Window>
-          <ChannelHeader />
-          <MessageList />
-          <MessageInput />
-        </Window>
-      </Channel>
-    </Chat>
+    <>
+      {channel ? (
+        <Chat client={client} theme={theme} customClasses={customClasses}>
+          <Channel channel={channel}>
+            <Window>
+              <ChatSuperiorCard profile={userProfile!}/>
+              <MessageList />
+              <MessageInput />
+            </Window>
+          </Channel>
+        </Chat>
+      ) : (
+        <div>Loading...</div>
+      )}
+    </>
   );
 };
 

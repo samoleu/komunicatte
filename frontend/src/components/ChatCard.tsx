@@ -1,4 +1,6 @@
+import {GeneralContext} from '@/context/GeneralContext';
 import Image from 'next/image';
+import { useContext } from 'react';
 
 interface ChatProps {
   chat: { 
@@ -10,14 +12,21 @@ interface ChatProps {
       status: Boolean,
     },
     members: String[],
+    _id: string
   }
 };
 
 const ChatCard = ({chat}: ChatProps) => {
+
+  const context = useContext(GeneralContext);
+
+  function handleCardClick() {
+    context.handleActiveView({chatId: chat._id, type: 'chat'});
+  }
     
   // TODO: change to profile picture in return
   return (
-    <div className="items-center bg-white flex ">
+    <div className="items-center bg-white flex " onClick={handleCardClick}>
       <div className="p-2 w-96 h-20 gap-7 flex items-center">
         <div className='w-16 h-16 content-center overflow-hidden rounded-full'>
           <Image src={"./next.svg"} alt="profile picture" height={64} width={64}/> 

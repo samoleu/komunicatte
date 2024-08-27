@@ -15,7 +15,6 @@ const createChat = async (req, res) => {
     if (isPrivate && chatExists > 0) {
       return res.status(400).json({ message: "Chat already exists." });
     }
-
       
     const chat = await new Chat(req.body);
     await chat.save();
