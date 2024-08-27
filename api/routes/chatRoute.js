@@ -1,5 +1,5 @@
-const express = require('express');
-const Chat = require('../models/chatModel');
+const express = require("express");
+const Chat = require("../models/chatModel");
 const router = express.Router();
 const { createChat, updateChatById, deleteChatById, findAllChatsByProfile } = require('../controllers/chatController');
 
