@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 
 const ChatSchema = mongoose.Schema(
   {
+    nameChat: {
+      type: String,
+      required: [true, 'Please provide a name.'],
+    },
     lastMessage: {
       message: {
         type: String,
@@ -24,7 +28,7 @@ const ChatSchema = mongoose.Schema(
     },
     members: {
       type: Array,
-      required: true,
+      required: [true, 'Please provide members.'],
       default: [],
     },
   },
