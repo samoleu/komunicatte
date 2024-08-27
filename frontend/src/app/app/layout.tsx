@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
 import "@/app/globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -15,10 +16,10 @@ export default function layout({
   children: React.ReactNode;
 }) {
   return (
-      <html lang="en">
-        <body className={`${inter.className} flex w-screen h-screen`}>
-          {children}
-        </body>
-      </html>
-  );
+    <html lang="en">
+      <body className={`${inter.className} flex w-screen h-screen`}>
+        {children}
+      </body>
+    </html>
+);
 }

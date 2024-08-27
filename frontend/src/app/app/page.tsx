@@ -4,12 +4,23 @@ import React, { useState, useEffect } from "react";
 import ChatArea from "@/components/ChatArea";
 import CommunityMenu from "@/components/CommunityMenu";
 import axios from "axios";
+import { UserButton, useUser } from "@clerk/nextjs";
+import { useRouter } from 'next/navigation'; 
 
 const apiUrl = process.env.NEXT_PUBLIC_BASE_URI;
 
-export default function Home() {
+export default function Page() {
   const [userToken, setUserToken] = useState<string | null>(null);
   const channelId = "test-channel"; // TODO: it should be recovered from the contextAPI
+  
+  const { isLoaded, isSignedIn } = useUser();
+  const router = useRouter(); 
+
+  useEffect(() => {
+    if (isLoaded && !isSignedIn) {
+      router.push('/'); 
+    }
+  }, [isLoaded, isSignedIn, router]);
 
   useEffect(() => {
     const fetchUserToken = async () => {
@@ -45,4 +56,6 @@ export default function Home() {
       </div>
     </div>
   );
-}
+};
+
+export default Page;
