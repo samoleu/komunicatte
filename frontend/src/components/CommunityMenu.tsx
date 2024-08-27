@@ -90,14 +90,13 @@ const CommunityMenu = () => {
   return (
     <>
       <div className="flex flex-nowrap absolute top-0 left-0 h-full">
-        <div className="flex flex-col items-center gap-4 py-4 px-2 h-full w-16 bg-background z-10 shadow-[5px_0px_10px_0px_#00000030]">
+        <div className="flex flex-col items-center gap-4 py-4 px-2 h-full w-16 bg-background shadow-[5px_0px_10px_0px_#00000030]">
           <CommunitySearchBtn />
           <div className="flex flex-col items-center gap-2 h-full w-full">
             {userCommunityList.map((community) => {
               return (
-                <div className={`flex rounded-xl justify-center items-center p-1 cursor-pointer`}>
+                <div className={`flex rounded-xl justify-center items-center p-1 cursor-pointer`} key={community.id}> 
                   <div
-                    key={community.id}
                     onClick={() => handleCommunityClick(community)}
                     className="h-12 w-12 overflow-hidden rounded-full"
                   >
