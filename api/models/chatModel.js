@@ -4,27 +4,11 @@ const ChatSchema = mongoose.Schema(
   {
     nameChat: {
       type: String,
-      required: [true, 'Please provide a name.'],
+      required: false,
     },
-    lastMessage: {
-      message: {
-        type: String,
-        required: false,
-      },
-      sender: {
-        type: String,
-        required: false,
-      },
-      timestamp: {
-        type: Date,
-        required: false,
-      },
-      status: {
-        // true: lida, false: não lida
-        type: Boolean,
-        required: false,
-        default: false,
-      },
+    createdBy: {
+      type: String,
+      required: false,
     },
     members: {
       type: Array,
