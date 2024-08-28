@@ -110,6 +110,11 @@ const joinCommunityById = async (req, res) => {
       return res.status(404).json({ message: "Community not found" });
     }
 
+    // Verifica se o membro já faz parte da comunidade
+    if (community.communityMembers.includes(idNewMember)) {
+      return res.status(400).json({ message: "Member is already part of the community" });
+    }
+
     // Adiciona o novo membro à lista de membros da comunidade
     community.communityMembers.push(idNewMember);
 
@@ -121,6 +126,7 @@ const joinCommunityById = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 const leaveCommunityById = async (req, res) => {
   try {
