@@ -34,7 +34,7 @@ const ChangeProfileButton = () => {
   const fetchProfiles = async () => {
     if (userId) {
       try {
-        const response = await axios.get(`${apiUrl}api/profile/clerk/${userId}`);
+        const response = await axios.get(`${apiUrl}/api/profile/clerk/${userId}`);
         setUserProfiles(response.data);
       } catch (error) {
         console.error("Error fetching user profiles:", error);
@@ -55,7 +55,7 @@ const ChangeProfileButton = () => {
     setIsPopupVisible(!isPopupVisible);
   };
 
-  const handleProfileClick = (profile: Object) => {
+  const handleProfileClick = (profile: Profile) => {
     context.handleProfile({id: profile._id, status: "online"});
   };
 
@@ -81,7 +81,7 @@ const ChangeProfileButton = () => {
     <div className="relative">
       <button
         ref={buttonRef}
-        className="m-0 p-3 py-2 flex justify-center items-center w-80 rounded-xl text-[rgb(252,252,255)] bg-[rgba(221,219,255,0.75)] backdrop-blur-lg select-none"
+        className="m-0 p-3 py-2 flex justify-center items-center w-72 rounded-xl text-[rgb(252,252,255)] bg-[rgba(221,219,255,0.75)] backdrop-blur-lg select-none"
         style={{ boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)' }}
         onClick={togglePopup}
       >

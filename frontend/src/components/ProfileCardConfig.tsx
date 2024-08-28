@@ -88,14 +88,13 @@ const ProfileCardConfig = ({ profile }: ProfileCardConfigProps) => {
       const img = document.createElement("img") as HTMLImageElement;
       img.src = profileData.profilePicture;
       img.onload = extractColor;
-    }
+    } 
   }, [profileData.profilePicture]);
 
   const saveProfileData = useCallback(async () => {
     try {
-      //! Change logic to save profile data to backend
+      //! Change logic to save profile data to backend  
       console.log("Profile saved:", profileData);
-      alert("Profile saved!");
     } catch (error) {
       console.error("Error saving profile data:", error);
     }

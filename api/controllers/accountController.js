@@ -13,19 +13,6 @@ const getAccountById = async (req, res) => {
   }
 };
 
-const getAccountByClerkId = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const account = await Account.findOne({ clerkUserId: id });
-    if (!account) {
-      return res.status(200).json( null );
-    }
-    res.status(200).json(account);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
 const createAccount = async (req, res) => {
   try {
     const { clerkUserId, userName, email, profileReferences } = req.body;
@@ -37,6 +24,12 @@ const createAccount = async (req, res) => {
       profileReferences,
     });
 
+    const existingAccount = await Account.find({ clerkUserId: clerkUserId });
+    if (existingAccount.length > 0) {
+      res.status(200).json({
+        existingAccount,
+      });
+    }
     const savedAccount = await newAccount.save();
     res.status(201).json(savedAccount);
   } catch (error) {
@@ -49,7 +42,10 @@ const updateAccountById = async (req, res) => {
     const { id } = req.params;
     const { clerkUserId, userName, email, profileReferences } = req.body;
 
-		if(clerkUserId) return res.status(400).json({ message: "Clerk User ID cannot be updated" });
+    if (clerkUserId)
+      return res
+        .status(400)
+        .json({ message: "Clerk User ID cannot be updated" });
 
     const account = await Account.findByIdAndUpdate(
       id,
@@ -91,7 +87,7 @@ const getAccountByClerkId = async (req, res) => {
     const { id } = req.params;
     const account = await Account.findOne({ clerkUserId: id });
     if (!account) {
-      return res.status(200).json( null );
+      return res.status(200).json(null);
     }
     res.status(200).json(account);
   } catch (error) {
@@ -100,9 +96,9 @@ const getAccountByClerkId = async (req, res) => {
 };
 
 module.exports = {
-	getAccountById,
-	createAccount,
-	updateAccountById,
-	deleteAccount,
+  getAccountById,
+  createAccount,
+  updateAccountById,
+  deleteAccount,
   getAccountByClerkId,
 };

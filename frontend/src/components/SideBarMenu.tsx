@@ -14,7 +14,7 @@ const SideBarMenu = () => {
     <>
       <div className="relative h-screen flex flex-col items-center w-80 z-20">
         {context.activeView.type === "chat" ? <ChatList /> : <CommunityMenu />}
-        <div className="absolute z-10 bottom-8 ">
+        <div className="absolute bottom-8 z-30">
           <Navbar />
         </div>
       </div>

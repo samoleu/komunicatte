@@ -83,8 +83,8 @@ const ChatList = () => {
   }, []);
 
   return (
-    <div className="bg-background p-2 h-screen w-96 z-50 shadow-[4px_0px_36.2px_1px_#EFEFFC]">
-      <div className="flex items-center ml-2 mb-4 mt-2">
+    <div className="bg-background py-4 px-4 h-screen w-full z-20 shadow-[4px_0px_36.2px_1px_#EFEFFC]">
+      <div className="flex items-center pb-4">
         <input
           type="text"
           onChange={(e) => setSearchBar(e.target.value)}

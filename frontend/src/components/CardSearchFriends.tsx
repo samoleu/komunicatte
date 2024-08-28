@@ -78,7 +78,7 @@ const CardSearchFriends: React.FC = () => {
   };
 
   return (
-    <div className="w-[36rem] h-[37rem] bg-[#dddbffd0] rounded-xl p-8 flex flex-col items-center">
+    <div className="w-[36rem] h-[37rem] bg-[#dddbffcc] rounded-xl p-8 flex flex-col items-center">
       <div className="flex mb-4 w-full p-2 text-text-2 bg-[#EFEFFC] rounded-md">
         <input
           type="text"

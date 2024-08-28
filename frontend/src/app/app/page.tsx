@@ -3,11 +3,7 @@
 import React, { useEffect } from "react";
 import SideBarMenu from "@/components/SideBarMenu";
 import ChatArea from "@/components/ChatArea";
-import CommunityMenu from "@/components/CommunityMenu";
-import UserInfo from "@/components/UserInfo";
-import Image from "next/image";
-import axios from "axios";
-import { UserButton, useUser } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 
 export default function Page() {
@@ -28,9 +24,6 @@ export default function Page() {
         <SideBarMenu />
       </div>
       <ChatArea />
-      <div className="absolute top-8 right-8">
-        <UserButton />
-      </div>
     </div>
   );
 }

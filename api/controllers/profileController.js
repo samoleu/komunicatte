@@ -62,6 +62,13 @@ const createProfile = async (req, res) => {
       profileName,
     });
 
+    const existingAccount = await Profile.find({ profileId: profileId });
+    if (existingAccount.length > 0) {
+      res.status(200).json({
+        existingAccount,
+      });
+    }
+
     const savedProfile = await newProfile.save();
     res.status(201).json(savedProfile);
   } catch (error) {
@@ -231,7 +238,6 @@ module.exports = {
   createProfile,
   updateProfile,
   deleteProfile,
-  getProfilesByClerkId,
   getProfileByName,
   addFriend,
   removeFriend,
