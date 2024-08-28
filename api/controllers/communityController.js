@@ -1,4 +1,5 @@
 const Community = require("../models/communityModel");
+const Profile = require("../models/profileModel");
 
 const createCommunity = async (req, res) => {
   try {
@@ -29,22 +30,36 @@ const createCommunity = async (req, res) => {
   }
 };
 
+const findAllComunittiesByProfile = async (req, res) => {
+  try {
+    const { profileId } = req.params;
+
+    if (!profileId || profileId === "") {
+      return res.status(400).json({ message: "Profile ID is required" });
+    }
+
+    let communities = await Community.find({ communityMembers: profileId });
+
+    if (communities.length === 0) {
+      return res.status(404).json({ message: "No communities found for the given profile" });
+    }
+
+    res.status(200).json(communities);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
 const findAllCommunitiesByName = async (req, res) => {
   try {
     const { name } = req.params;
-    const userId = req.user.id; // Supondo que o ID do usuário está disponível em req.user.id
 
     if (!name || name === "") {
       return res.status(400).json({ message: "Community name is required" });
     }
 
-    let communities = await Community.find({ communityName: name ,
+    let communities = await Community.find({ communityName: { $regex: name, $options: "i" },
       visibility : true
-    });
-
-    // Filtrar comunidades para incluir apenas aquelas que são públicas ou onde o usuário é um membro
-    communities = communities.filter(community => {
-      return community.visibility === true || community.communityMembers.includes(userId);
     });
 
     if (communities.length === 0) {
@@ -61,8 +76,12 @@ const updateCommunityById = async (req, res) => {
   try {
     const { id } = req.params;
 
+    const {communityName, communityDescription, communityPhoto} = req.body;
+
+    const values = {communityName, communityDescription, communityPhoto};
+
     // Find and update the community by ID
-    const updatedCommunity = await Community.findByIdAndUpdate(id, req.body, { new: true, runValidators: true });
+    const updatedCommunity = await Community.findByIdAndUpdate(id, values, { new: true, runValidators: true });
 
     if (!updatedCommunity) {
       return res.status(404).json({ message: "Community not found" });
@@ -74,18 +93,79 @@ const updateCommunityById = async (req, res) => {
   }
 };
 
+const joinCommunityById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { idNewMember } = req.body;
+
+    // Verifica se o novo membro existe
+    const newMember = await Profile.findById(idNewMember);
+    if (!newMember) {
+      return res.status(404).json({ message: "Member not found" });
+    }
+
+    // Encontra a comunidade pelo ID
+    const community = await Community.findById(id);
+    if (!community) {
+      return res.status(404).json({ message: "Community not found" });
+    }
+
+    // Adiciona o novo membro à lista de membros da comunidade
+    community.communityMembers.push(idNewMember);
+
+    // Atualiza a comunidade com o novo membro
+    const updatedCommunity = await community.save();
+
+    res.status(200).json(updatedCommunity);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const leaveCommunityById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { idMember } = req.body;
+
+    // Verifica se o membro existe
+    const member = await Profile.findById(idMember);
+    if (!member) {
+      return res.status(404).json({ message: "Member not found" });
+    }
+
+    // Encontra a comunidade pelo ID
+    const community = await Community.findById(id);
+    if (!community) {
+      return res.status(404).json({ message: "Community not found" });
+    }
+
+    // Verifica se o membro faz parte da comunidade
+    const memberIndex = community.communityMembers.indexOf(idMember);
+    if (memberIndex === -1) {
+      return res.status(400).json({ message: "Member is not part of the community" });
+    }
+
+    // Remove o membro da lista de membros da comunidade
+    community.communityMembers.splice(memberIndex, 1);
+
+    // Atualiza a comunidade removendo o membro
+    const updatedCommunity = await community.save();
+
+    res.status(200).json(updatedCommunity);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 const deleteCommunity = async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.user.id;
     const community = await Community.findById(id);
 
     if (!community) {
       return res.status(404).json({ message: "Community not found" });
     }
-    if (!community.admins.includes(userId)) {
-      return res.status(403).json({ message: "User is not an admin of this community" });
-    }
+
 
     await Community.findByIdAndDelete(id);
 
@@ -100,4 +180,7 @@ module.exports = {
   findAllCommunitiesByName,
   updateCommunityById,
   deleteCommunity,
+  findAllComunittiesByProfile,
+  joinCommunityById,
+  leaveCommunityById
 };
