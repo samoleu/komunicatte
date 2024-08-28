@@ -20,7 +20,7 @@ interface CommunityNavProps {
 
 const CommunityNav = ({ communityInfo }: CommunityNavProps) => {
   return (
-    <section className="flex flex-col h-full w-64 bg-background items-center shadow-[0px_4px_36.4px_11px_#DDDBFF] z-10">
+    <section className="flex flex-col h-full w-64 bg-background items-center shadow-[0px_4px_36.4px_3px_#DDDBFF] z-10">
       <div className="flex flex-col flex-nowrap items-center w-full">
         <div className="w-full h-48 justify-center items-center flex overflow-hidden">
           <Image
