@@ -90,7 +90,7 @@ const CommunityMenu = () => {
   return (
     <>
       <div className="flex flex-nowrap absolute top-0 left-0 h-full">
-        <div className="flex flex-col items-center gap-4 py-4 px-2 h-full w-16 bg-background shadow-[5px_0px_10px_0px_#00000030]">
+        <div className="flex flex-col items-center gap-4 py-4 px-2 h-full w-16 bg-background shadow-[4px_0px_36.2px_1px_#EFEFFC]">
           <CommunitySearchBtn />
           <div className="flex flex-col items-center gap-2 h-full w-full">
             {userCommunityList.map((community) => {
