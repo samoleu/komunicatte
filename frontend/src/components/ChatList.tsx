@@ -83,7 +83,7 @@ const ChatList = () => {
   }, []);
 
   return (
-    <div className="bg-background p-2 h-screen w-96">
+    <div className="bg-background p-2 h-screen w-full">
       <div className="flex items-center ml-2 mb-4 mt-2">
         <input
           type="text"
@@ -103,7 +103,7 @@ const ChatList = () => {
       {showSearchFriends && (
         <div
           ref={searchFriendsRef}
-          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+          className="absolute top-[50vh] left-[50vw] transform -translate-x-1/2 -translate-y-1/2"
         >
           <CardSearchFriends />
         </div>

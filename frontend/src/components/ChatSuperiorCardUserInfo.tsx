@@ -1,14 +1,15 @@
-import React from "react";
-import Image from "next/image";
+"use client";
 
-const apiUrl = process.env.NEXT_PUBLIC_BASE_URI;
+import React, { useState } from "react";
+import Image from "next/image";
+import ProfileCard from "./ProfileCard";
 
 interface ChatSuperiorCardUserInfoProps {
   profile: {
     accountRef: string;
     profileId: string;
     profileName: string;
-    acitivityStatus: string;
+    acitivityStatus: string; // Corrected the typo here
     bio: string;
     profilePicture: string;
     friends: string[];
@@ -19,22 +20,42 @@ interface ChatSuperiorCardUserInfoProps {
 const ChatSuperiorCardUserInfo = ({
   profile,
 }: ChatSuperiorCardUserInfoProps) => {
+  const [showProfile, setShowProfile] = useState(false);
+
+  function handleShowProfile() {
+    setShowProfile(!showProfile);
+  }
+
   return (
-    <div className="flex items-center gap-2">
-      <div className="h-12 w-12 overflow-hidden rounded-full">
-        <Image
-          src={profile.profilePicture}
-          alt={`${profile.profileName}'s Photo`}
-          width={64}
-          height={64}
-          className="object-cover h-full w-full"
-        />
+    <>
+      {showProfile && (
+        <div className="flex justify-center items-center w-full bg-black opacity-20 blur-3xl">
+          <ProfileCard profile={profile} />
+        </div>
+      )}
+      {/* TODO: ADD handleShowProfile to onClick Attribute */}
+      <div className="flex items-center gap-4 w-full h-full">
+        <div>
+          <div className="rounded-full h-14 w-14 overflow-hidden flex items-center justify-center">
+            <Image
+              src={
+                profile.profilePicture
+                  ? profile.profilePicture
+                  : "https://imgur.com/mCHMpLT.png"
+              }
+              alt={`${profile.profileName}'s Photo`}
+              width={64}
+              height={64}
+              className="object-cover h-full w-full"
+            />
+          </div>
+        </div>
+        <div className="flex flex-col text-text">
+          <p className="font-bold text-4xl">{profile.profileName}</p>
+          <p>{profile.acitivityStatus}</p> {/* Corrected the typo here */}
+        </div>
       </div>
-      <div className="flex flex-col">
-        <p className="font-bold text-xl">{profile.profileName}</p>
-        <p className="">{profile.acitivityStatus}</p>
-      </div>
-    </div>
+    </>
   );
 };
 

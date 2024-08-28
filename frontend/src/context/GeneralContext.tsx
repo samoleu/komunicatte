@@ -49,16 +49,20 @@ export default function GeneralContextProvider({
 }) {
   const { userId } = useAuth();
   const [clerkId, setClerkId] = useState<string | null | undefined>(userId);
-  const [userToken, setUserToken] = useState<string | null | undefined>(defaultContext.userToken);
+  const [userToken, setUserToken] = useState<string | null | undefined>(
+    defaultContext.userToken
+  );
   const [profile, setProfile] = useState(defaultContext.profile);
   const [theme, setTheme] = useState(defaultContext.theme);
   const [activeView, setActiveView] = useState(defaultContext.activeView);
 
   useEffect(() => {
     const fetchUserToken = async () => {
-      if (userId) {
+      if (profile?.id) {
         try {
-          const response = await axios.get(`${apiUrl}/api/stream/authenticate/${userId}`);
+          const response = await axios.get(
+            `${apiUrl}/api/stream/authenticate/${profile.id}`
+          );
           const { token } = response.data;
           setUserToken(token);
         } catch (error) {
@@ -68,7 +72,7 @@ export default function GeneralContextProvider({
     };
 
     fetchUserToken();
-  }, [userId]);
+  }, [profile]);
 
   useEffect(() => {
     setClerkId(userId);
@@ -79,7 +83,7 @@ export default function GeneralContextProvider({
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get('/api/clerk-user', {
+        const response = await axios.get("/api/clerk-user", {
           params: { user_id: clerkId },
         });
         setClerkUser(response.data);
@@ -92,19 +96,19 @@ export default function GeneralContextProvider({
 
   useEffect(() => {
     const fetchProfileId = async () => {
+      if (!clerkId || !clerkUser) return; // Ensure necessary data is available
+
       try {
         const response = await axios.get(
           `${apiUrl}/api/account/clerk/${clerkId}`
         );
+
         if (response.data) {
           console.log("User account exists", response.data);
-          const currentProfileId = response.data.profileReferences[0];
-          setProfile({ id: currentProfileId, status: "online" });
-          axios.put(`${apiUrl}/api/profile/${currentProfileId}`, {
-            activityStatus: "online",
-          });
+          setProfile({ id: response.data.profileReferences[0], status: "online" });
         } else {
           console.log("Account first login, creating profile");
+
           const accountCreateResponse = await axios.post(
             `${apiUrl}/api/account/`,
             {
@@ -114,35 +118,39 @@ export default function GeneralContextProvider({
               profileReferences: [],
             }
           );
+
           console.log("Account created", accountCreateResponse.data);
+
           const profileCreatedResponse = await axios.post(
             `${apiUrl}/api/profile/`,
             {
               accountRef: clerkId,
               profileId: clerkUser.username,
-              profileName: clerkUser.firstName,
+              profileName: clerkUser.first_name,
             }
           );
+
           console.log("Profile created", profileCreatedResponse.data);
-          const accountPutResponse = await axios.put(
+
+          await axios.put(
             `${apiUrl}/api/account/${accountCreateResponse.data._id}`,
             {
               profileReferences: [profileCreatedResponse.data._id],
             }
           );
-          console.log("Account updated", accountPutResponse.data);
+
+          console.log("Account updated");
         }
-        console.log("API call succeeded");
       } catch (error) {
-        console.error("Failed to get user account", error);
+        console.error("Failed to get or create user account", error);
       }
     };
 
     fetchProfileId();
-  }, [clerkUser]);
+  }, [clerkId, clerkUser]);
 
   function handleTheme() {
-    setTheme(prevTheme => (prevTheme === "light" ? "dark" : "light"));
+    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
   }
 
   function handleProfile(profile: GeneralContextType["profile"]) {

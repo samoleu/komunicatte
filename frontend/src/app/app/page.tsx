@@ -17,7 +17,7 @@ export default function Page() {
   }, [isLoaded, isSignedIn, router]);
 
   return (
-    <div className="flex h-screen">
+    <div className="flex relative">
       <div className="w-80">
         {" "}
         {/* Adjust this width as needed */}
