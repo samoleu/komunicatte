@@ -83,7 +83,7 @@ const ChatList = () => {
   }, []);
 
   return (
-    <div className="bg-background p-2 h-screen w-full">
+    <div className="bg-background p-2 h-screen w-96 z-50 shadow-[4px_0px_36.2px_1px_#EFEFFC]">
       <div className="flex items-center ml-2 mb-4 mt-2">
         <input
           type="text"
@@ -93,10 +93,10 @@ const ChatList = () => {
         />
         <button
           ref={buttonRef}
-          className="text-blue-500 bg-[#EFEFFC] text-sm ml-3 mr-3 p-1 h-full rounded-md"
+          className="bg-[#EFEFFC] mx-3 p-2 rounded-md"
           onClick={toggleSearchFriends}
         >
-          <RiUserAddLine className="text-3xl text-black" />
+          <RiUserAddLine className='text-3xl text-text-2'/>
         </button>
       </div>
 

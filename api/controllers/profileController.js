@@ -231,8 +231,10 @@ module.exports = {
   createProfile,
   updateProfile,
   deleteProfile,
+  getProfilesByClerkId,
   getProfileByName,
   addFriend,
   removeFriend,
   getProfilesByClerkId
 };
+

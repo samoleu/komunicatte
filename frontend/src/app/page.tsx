@@ -3,8 +3,11 @@
 // const context = useContext(GeneralContext);
 // {context.theme};
 
-"use client";
+'use client';
 
+import Navbar from "@/components/Navbar";
+import { useContext } from "react"
+import { GeneralContext } from "@/context/GeneralContext"
 import React from "react";
 import Image from "next/image";
 import ClerkBtn from "@/components/SignInBtn";

@@ -1,27 +1,62 @@
 'use client';
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import { FaArrowRight } from "react-icons/fa";
+import axios from "axios";
+import { GeneralContext } from "@/context/GeneralContext";
+
+const apiUrl = process.env.NEXT_PUBLIC_BASE_URI;
+
+type Account = {
+  clerkUserId: string;
+  userName: string;
+  email: string;
+  profileReferences?: Profile[];
+}
 
 type Profile = {
   accountRef: string;
   profileId: string;
   profileName?: string;
   profilePicture?: string;
+  _id: string; 
 };
 
-const ChangeProfileButton = ({ profiles }: { profiles: Profile[] }) => {
+const ChangeProfileButton = () => {
+  const context = useContext(GeneralContext);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [profileChange, setProfileChange] = useState(Object);
   const popupRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+
+  const [userProfiles, setUserProfiles] = useState<Profile[]>([]);
+  const userId  = context.clerkId;
+
+  const fetchProfiles = async () => {
+    if (userId) {
+      try {
+        const response = await axios.get(`${apiUrl}api/profile/clerk/${userId}`);
+        setUserProfiles(response.data);
+      } catch (error) {
+        console.error("Error fetching user profiles:", error);
+      }
+    }
+  };
+
+  
+  useEffect(() => {
+    fetchProfiles();
+  }, [userId]);
+
+  useEffect(() => {
+    console.log('Updated Profiles:', userProfiles);
+  }, [userProfiles]);
 
   const togglePopup = () => {
     setIsPopupVisible(!isPopupVisible);
   };
 
-  const handleProfileClick = (profileId: string) => {
-    // Handle the profile click event (e.g., navigate to profile details)
-    console.log(`Profile clicked: ${profileId}`);
-    // You can add logic to navigate or show profile details here
+  const handleProfileClick = (profile: Object) => {
+    context.handleProfile({id: profile._id, status: "online"});
   };
 
   const handleClickOutside = (event: MouseEvent) => {
@@ -65,15 +100,17 @@ const ChangeProfileButton = ({ profiles }: { profiles: Profile[] }) => {
             zIndex: 1000,
           }}
         >
-          {profiles.slice(0, 3).map((profile, index) => (
-            <div key={profile.profileId} className={`flex items-center p-1 ${index < profiles.length - 1 ? 'border-b border-[rgb(252,252,255)]' : ''}`}>
+          {userProfiles.slice(0, 3).map((profile, index) => (
+            <div key={index} className={`flex items-center p-1 ${index < userProfiles.length - 1 ? 'border-b border-[rgb(252,252,255)]' : ''}`}>
               <button
-                className="flex items-center w-full text-left bg-transparent hover:bg-[rgba(176,169,255,0.75)] rounded-xl select-none p-1"
-                onClick={() => handleProfileClick(profile.profileId)}
+                className="flex items-center w-full text-left bg-transparent hover:bg-[rgba(200,195,255,0.75)] rounded-xl select-none p-1"
+                onClick={() => handleProfileClick(profile)}
               >
                 <img
-                  src={profile.profilePicture || 'https://placehold.jp/3d4070/ffffff/50x50.png?text=No%20Image'}
+                  src={`${profile.profilePicture}.png` || 'https://placehold.jp/3d4070/ffffff/50x50.png?text=No%20Image'}
                   alt={profile.profileName}
+                  height={300}
+                  width={300}
                   className="w-12 h-12 rounded-full mr-2 object-cover"
                 />
                 <span className="font-bold truncate w-[calc(100%-3rem)]">{profile.profileName || 'Unnamed Profile'}</span>
