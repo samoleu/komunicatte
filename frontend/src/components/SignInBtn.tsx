@@ -8,6 +8,7 @@ interface ClerkBtnProps {
 }
 
 const ClerkBtn: React.FC<ClerkBtnProps> = ({ className, label = "Sign in" }) => {
+  
   const { isSignedIn } = useUser();
   const router = useRouter();
 

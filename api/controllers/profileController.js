@@ -234,6 +234,7 @@ module.exports = {
   getProfilesByClerkId,
   getProfileByName,
   addFriend,
-  removeFriend
+  removeFriend,
+  getProfilesByClerkId
 };
 

@@ -17,9 +17,9 @@ interface ChatSuperiorCardProps {
 
 const ChatSuperiorCard = ({ profile }: ChatSuperiorCardProps) => {
   return (
-    <div className="flex items-center justify-between bg-background text-text h-16 w-full px-2">
+    <div className="flex items-center justify-between bg-background text-text h-32 w-full px-2 shadow-md z-10">
       <ChatSuperiorCardUserInfo profile={profile} />
-      <CallButtons />
+      {/* <CallButtons /> */}
     </div>
   );
 };

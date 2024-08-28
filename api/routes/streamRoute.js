@@ -5,8 +5,8 @@ const {
   authenticateUser,
   createChannel,
   sendMessage,
+  getChannelByUserId,
   getUserById,
-  getChannelByUserId
 } = require("../controllers/streamController");
 
 router.get("/authenticate/:id", authenticateUser);

@@ -1,50 +1,46 @@
 "use client";
-import Image from 'next/image';
-import { useContext, useEffect, useState } from "react"
-import { GeneralContext } from "@/context/GeneralContext";
-import axios from 'axios';
 
-const apiUrl = process.env.NEXT_PUBLIC_BASE_URI;
+import { useContext, useState } from "react";
+import { GeneralContext } from "@/context/GeneralContext";
+import Image from "next/image";
 
 interface ChatProps {
-  chat: { 
-    nameChat: String,
-    members: String[],
-  }
-};
+  chat: {
+    nameChat: String;
+    members: String[];
+    _id: string;
+  };
+}
 
-const ChatCard = ({chat}: ChatProps) => {
+const ChatCard = ({ chat }: ChatProps) => {
   const context = useContext(GeneralContext);
-  const [profilePicture, setProfilePicture] = useState<string>('https://imgur.com/mCHMpLT.png');
+  const [profilePicture, setProfilePicture] = useState<string>(
+    "https://imgur.com/mCHMpLT.png"
+  );
 
-  //TODO IMAGEM DO PERFIL INCOMPLETO, TERMINAR !!!!!!!!!!!!!!!!!!!!
-  
-  // useEffect(() => {
-  //   const fetchProfilePicture = async () => {
-  //     try {
-  //       const isPrivate = chat.members.length === 2;
-  //       const friendId = chat.members[0] === context.profile?.id ? chat.members[1] : chat.members[0];
-        
-  //       if (isPrivate) {
-  //         const response = await axios.get(`${apiUrl}/api/profile/${friendId}`);
-  //         setProfilePicture(response.data.profilePicture); // Adjust based on your API response
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching profile picture:", error);
-  // //     }
-  // //   };
-
-  //   fetchProfilePicture();
-  // }, [chat.members, context.profile?.id]); // Dependencies
-
+  function handleCardClick() {
+    context.handleActiveView({ chatId: chat._id, type: "chat" });
+  }
 
   // TODO: change to profile picture in return
   return (
-    <div className="items-center bg-white flex rounded-2xl">
-      <div className="p-2 w-96 h-20 gap-6 flex items-center">
-        <div className='w-14 h-14 min-w-14 min-h-14 max-w-14 max-h-14 flex items-center justify-center overflow-hidden rounded-full'>
-          <Image src={profilePicture} alt="profile picture" height={64} width={64}/> 
+    <div
+      className="items-center bg-background flex rounded-2xl hover:bg-[#EFEFFC] transition-colors duration-150 cursor-pointer"
+      onClick={handleCardClick} 
+    >
+      <div className="px-4 py-2 w-96 h-20 gap-6 flex items-center">
+        <div>
+          <div className="rounded-full h-14 w-14 overflow-hidden flex items-center justify-center">
+            <Image
+              src={profilePicture}
+              alt="profile picture"
+              width={64}
+              height={64}
+              className="object-cover h-full w-full"
+            />
+          </div>
         </div>
+
         <div className="flex flex-col">
           <h2 className="text-text text-xl">{chat.nameChat}</h2>
         </div>

@@ -1,13 +1,20 @@
 'use client';
 import { IoChatbubble } from "react-icons/io5";
 import { FaUsers, FaCog, FaUser } from "react-icons/fa";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import {GeneralContext} from "@/context/GeneralContext";
 import { UserButton, UserProfile } from "@clerk/nextjs";
 import ChangeProfileButton from "./ChangeProfileButton";
 
 const Navbar = () => {
 
-  const [activeTab, setActiveTab] = useState("chats");
+  const [activeTab, setActiveTab] = useState("chat");
+  const context = useContext(GeneralContext);
+
+  function handleClick(chatType : "chat" | "community") {
+    context.handleActiveView({chatId: null, type: chatType});
+    setActiveTab(chatType);
+  }
 
   return (
     <>
@@ -18,7 +25,7 @@ const Navbar = () => {
 
         <div
           className={`flex p-1 font-bold justify-center items-center cursor-pointer ${activeTab === 'chats' ? 'text-[rgb(98,88,187)]' : 'text-[rgb(252,252,255)]'}`}
-          onClick={() => setActiveTab('chats')}
+          onClick={() => handleClick('chat')}
         >
           <IoChatbubble size={24}/>
         </div>
@@ -26,7 +33,7 @@ const Navbar = () => {
         
         <div
           className={`flex p-1 font-bold justify-center items-center cursor-pointer ${activeTab === 'communities' ? 'text-[rgb(98,88,187)]' : 'text-[rgb(252,252,255)]'}`}
-          onClick={() => setActiveTab('communities')}
+          onClick={() => handleClick('community')}
         >
           <FaUsers size={24}/>
         </div>

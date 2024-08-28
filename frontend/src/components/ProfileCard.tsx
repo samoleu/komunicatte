@@ -8,7 +8,7 @@ interface ProfileCardProps {
     accountRef: string;
     profileId: string;
     profileName: string;
-    activityStatus: string;
+    acitivityStatus: string;
     bio: string;
     profilePicture: string;
     friends: string[];
@@ -22,8 +22,8 @@ const ProfileCard = ({ profile }: ProfileCardProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
 
-  const getActivityColor = (status: string) => {
-    switch (status.toLowerCase()) {
+  const getActivityColor = (acitivityStatus: string) => {
+    switch (acitivityStatus.toLowerCase()) {
       case "online":
         return "border-onlineActivity";
       case "offline":
@@ -35,7 +35,7 @@ const ProfileCard = ({ profile }: ProfileCardProps) => {
     }
   };
 
-  const activityColor = getActivityColor(profile.activityStatus);
+  const activityColor = getActivityColor(profile.acitivityStatus);
 
   const truncatedName =
     profile.profileName.length > 16
@@ -121,10 +121,10 @@ const ProfileCard = ({ profile }: ProfileCardProps) => {
             className="absolute text-lg font-semibold text-black top-[2.5rem] select-none max-w-[6rem] text-center break-words leading-tight transform -translate-y-[40%]"
             style={{
               lineHeight:
-                profile.activityStatus.length > 10 ? "1.2" : "normal",
+                profile.acitivityStatus.length > 10 ? "1.2" : "normal",
             }}
           >
-            {profile.activityStatus}
+            {profile.acitivityStatus}
           </span>
         </div>
       </div>
