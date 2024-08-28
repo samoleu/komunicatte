@@ -24,12 +24,6 @@ const createAccount = async (req, res) => {
       profileReferences,
     });
 
-    const existingAccount = await Account.find({ clerkUserId: clerkUserId });
-    if (existingAccount.length > 0) {
-      res.status(200).json({
-        existingAccount,
-      });
-    }
     const savedAccount = await newAccount.save();
     res.status(201).json(savedAccount);
   } catch (error) {
