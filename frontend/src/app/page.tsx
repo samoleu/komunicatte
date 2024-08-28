@@ -5,6 +5,7 @@
 
 'use client';
 
+import Navbar from "@/components/Navbar";
 import { useContext } from "react"
 import { GeneralContext } from "@/context/GeneralContext"
 

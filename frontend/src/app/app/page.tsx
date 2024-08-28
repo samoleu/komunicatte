@@ -3,6 +3,12 @@
 import React, { useState, useEffect } from "react";
 import ChatArea from "@/components/ChatArea";
 import CommunityMenu from "@/components/CommunityMenu";
+
+
+import UserInfo from "@/components/UserInfo";
+
+import Image from "next/image";
+
 import axios from "axios";
 import { UserButton, useUser } from "@clerk/nextjs";
 import { useRouter } from 'next/navigation'; 
@@ -44,7 +50,9 @@ export default function Page() {
 
   console.log(channelId, userToken);
 
+
   return (
+
     <div className="flex h-screen">
       <div className="w-80">
         {" "}

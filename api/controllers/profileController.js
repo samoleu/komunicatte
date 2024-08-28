@@ -214,13 +214,26 @@ const deleteProfile = async (req, res) => {
   }
 };
 
+const getProfilesByClerkId = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const profiles = await Profile.find({ accountRef: id });
+    ({ accountRef: id });
+    res.status(200).json(profiles);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
 module.exports = {
   getAllProfiles,
   getProfileById,
   createProfile,
   updateProfile,
   deleteProfile,
+  getProfilesByClerkId,
   getProfileByName,
   addFriend,
   removeFriend
 };
+
