@@ -1,6 +1,6 @@
 # Messaging Web App
 
-SAMUZAP is an Messaging Web App designed for communication and interaction among users. The system allows users to create accounts, profiles, engage in conversations, send messages, react to messages, make calls, create communities, add friends, and more. Notifications are sent when messages are received, and users can participate in conversations within communities.
+Komunicatte is an Messaging Web App designed for communication and interaction among users. The system allows users to create accounts, profiles, engage in conversations, send messages, react to messages, make calls, create communities, add friends, and more. Notifications are sent when messages are received, and users can participate in conversations within communities.
 
 ### Project Status
 
